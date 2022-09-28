@@ -1,0 +1,36 @@
+create table Admins(
+    id int primary key auto_increment,
+    dispute varchar(50),
+    username varchar(20),
+    password varchar(20)      
+);
+
+create table RegisteredSellers(
+   sellerId int primary key auto_increment,
+   username varchar(20),
+   password varchar(20)
+);
+
+create table ItemsBySellers(
+  itemId int primary key auto_increment,
+  price int ,
+  quantity int ,
+  soldBy int,
+  foreign key (soldBy) references RegisteredSellers(sellerId)
+);
+
+create table RegisteredBuyers(
+   buyerId int primary key auto_increment,
+   username varchar(20),
+   password varchar(20)  
+);
+
+create table ItemsSold(
+  itemID int,
+  ownerID int,
+  foreign key (itemID) references ItemsBySellers(itemId),
+  foreign key (ownerID) refernces RegisterdBuyers(buyerId)
+);
+
+
+
