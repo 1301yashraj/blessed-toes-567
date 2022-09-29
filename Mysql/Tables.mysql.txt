@@ -1,9 +1,10 @@
 create table Admins(
-    id int primary key auto_increment,
-    dispute varchar(50),
+    id int primary key auto_increment, 
     username varchar(20),
     password varchar(20)      
 );
+  dispute varchar(50),
+
 
 create table RegisteredSellers(
    sellerId int primary key auto_increment,
@@ -13,9 +14,11 @@ create table RegisteredSellers(
 
 create table ItemsBySellers(
   itemId int primary key auto_increment,
+  name varchar(20),
   price int ,
   quantity int ,
   soldBy int,
+ category varchar(20),
   foreign key (soldBy) references RegisteredSellers(sellerId)
 );
 
@@ -28,8 +31,10 @@ create table RegisteredBuyers(
 create table ItemsSold(
   itemID int,
   ownerID int,
+  quantity int,
+SoldOn date,
   foreign key (itemID) references ItemsBySellers(itemId),
-  foreign key (ownerID) refernces RegisterdBuyers(buyerId)
+  foreign key (ownerID) references RegisteredBuyers(buyerId)
 );
 
 
