@@ -1,4 +1,4 @@
-package raj.yash.Connection;
+package raj.yash.Utility;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,7 +19,7 @@ public class ConnectTODB {
 		}
 		
 		//Making a Connection with Our Database 
-		String url = "jdbc:mysql://localhost:3306/Automated_Auction";
+		String url = "jdbc:mysql://localhost:3306/AUCTION_DATA";
 		try
 		{
 		 con = DriverManager.getConnection(url,"root","root");
