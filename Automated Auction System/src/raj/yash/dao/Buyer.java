@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import raj.yash.Utility.ConnectTODB;
+import raj.yash.bean.Item;
 
 
 public class Buyer  {
@@ -22,12 +23,25 @@ public class Buyer  {
 		try(Connection con = ConnectTODB.connect())
 		{
 		     PreparedStatement ps = con.prepareStatement("select * from  "
-		     		+ "itemsby seller where soldBy = ?");
-		     ps.setInt(1, this.buyerId);
+		     		+ "itemsbysellers ");
+		     
 		     ResultSet rs = ps.executeQuery();
+		     boolean hasNoItems = true; 
 		     while(rs.next()) 
 		     {
-		    	 System.out.println("");
+		    	 hasNoItems = false;
+		    	 int id = rs.getInt("itemId");
+		    	 String name = rs.getString("name");
+		    	 int price = rs.getInt("price");
+		    	 int quan = rs.getInt("quantity");
+		    	 int soldBy = rs.getInt("soldBy");
+		    	 String category = rs.getString("category");
+		    	 Item item = new Item(id,name,price,quan,soldBy,category);
+		    	 System.out.println(item);
+		     }
+		     if(hasNoItems) 
+		     {
+		    	 System.out.println("Empty Inventory !!!!!");
 		     }
 		}
 		catch(SQLException e)

@@ -68,12 +68,13 @@ public class SellerOptions {
 						  +"5.View Sold Items"
 						  +"6.Exit");
 				   int n = sc.nextInt();
-				   Buyer buyer = new Buyer(sellerId);
+				   Seller seller  = new Seller(sellerId);
 				   switch(n)
 				   {
-				    case 1 : buyer.seeAll();break;
-				    case 2: buyer.addItem(); break;
-				    case 3 : buyer.update(); break; 
+				    case 1 : seller.checkoutInventory();break;
+				    case 2: seller.addItem(); break;
+				    case 3 : seller.update(); break; 
+				    case 4 : seller.remove(); break;
 				   }  
 		   }
 		   
