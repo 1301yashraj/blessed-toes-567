@@ -4,18 +4,27 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class Login_Signup {
    String username = "";
    String password = "";
    
-   public static String signup(String tableName, String username,String password) {
-	   String message =  "Unable to Register user";
-	try(Connection con = ConnectTODB.connect())// we got the connection 
-	{
+   public static String signup(String tableName) {
+	   Scanner sc = new Scanner(System.in);
+		System.out.println("YOU can Signup as "+tableName+" >>>");
+		System.out.println("===================");
+		System.out.println("Enter Username :");
+		String username = sc.next();
+		System.out.println("Enter PASSWORD :");
+		String password = sc.next();	   
+		String message =  "Unable to Register user";
+	    try(Connection con = ConnectTODB.connect())// we got the connection 
+	    {
 		// now insert into our table 
 		PreparedStatement ps = con.prepareStatement(
-				"insert into "+tableName+" values (?,?)");
+				"insert into "+tableName+"(username,password) "
+						+ "values (?,?)");
 		
 		ps.setString(1, username);
 		ps.setString(2, password);
@@ -24,6 +33,7 @@ public class Login_Signup {
 		if(x>0) {
 			message ="You Have been Registerd now you can login ";
 		}
+		
 	}
 	catch(SQLException e)
 	{
@@ -32,8 +42,13 @@ public class Login_Signup {
 	   return message;   
    }
 
-public static boolean login(String tableName,String username,String password) {
-	boolean logSuccess = false;
+public static int login(String tableName,String username,String password) {
+	String colName = null;
+	if(tableName.equals("RegisteredSellers"))
+		 colName  = "sellerId";
+	else 
+		colName = "buyerId";
+	int logSuccess = 0;
 	 try(Connection con = ConnectTODB.connect()){
 		 PreparedStatement ps = con.prepareStatement("Select * from "
 		 		+ ""+tableName+" where username = ? AND password = ? ");
@@ -42,7 +57,7 @@ public static boolean login(String tableName,String username,String password) {
 		 ResultSet rs = ps.executeQuery();
 		 
 		 if(rs.next()) {
-			 logSuccess = true;
+			 logSuccess = rs.getInt(colName);
 		 }
 	 
 	 } catch (SQLException e) {
