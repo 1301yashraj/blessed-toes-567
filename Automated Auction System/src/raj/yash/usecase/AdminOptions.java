@@ -29,7 +29,7 @@ public class AdminOptions  {
 		  switch(n) {
 		  case 1 : admin.allTable("Buyer"); break;
 		  case 2 : admin.allTable("Seller"); break;
-		 // case 3 : admin.dailySales(); break;
+		  case 3 : admin.dailySales(); break;
 		// WE should not call the main method it can lead to errors, 
 		// just for now Later we will change it.
 		  case 4 :isAdmin= -1;  

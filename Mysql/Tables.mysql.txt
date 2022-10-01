@@ -1,7 +1,7 @@
 create table Admins(
-    id int primary key auto_increment, 
+    id int primary key auto_increment,
     username varchar(20),
-    password varchar(20)      
+    password varchar(20)
 );
   dispute varchar(50),
 
@@ -25,7 +25,7 @@ create table ItemsBySellers(
 create table RegisteredBuyers(
    buyerId int primary key auto_increment,
    username varchar(20),
-   password varchar(20)  
+   password varchar(20)
 );
 
 create table ItemsSold(
@@ -36,6 +36,7 @@ SoldOn date,
   foreign key (itemID) references ItemsBySellers(itemId),
   foreign key (ownerID) references RegisteredBuyers(buyerId)
 );
+
 
 
 

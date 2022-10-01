@@ -61,7 +61,7 @@ public class SellerOptions {
 		   while(flag)
 		   {
 			   System.out.println("What would you like to do :: \n"
-				   		+ "1.Checkout Inventory \n"
+				   		  +"1.Checkout Inventory \n"
 						  +"2.Add Item \n"
 						  +"3.Update \n"
 						  +"4.Delete Item \n"
@@ -75,6 +75,8 @@ public class SellerOptions {
 				    case 2: seller.addItem(); break;
 				    case 3 : seller.update(); break; 
 				    case 4 : seller.remove(); break;
+				    case 5 : seller.soldItems(); break;
+				    case 6 : flag = false;
 				   }  
 		   }
 		   

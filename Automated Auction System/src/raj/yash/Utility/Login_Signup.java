@@ -44,10 +44,22 @@ public class Login_Signup {
 
 public static int login(String tableName,String username,String password) {
 	String colName = null;
+	System.out.println(tableName);
 	if(tableName.equals("RegisteredSellers"))
 		 colName  = "sellerId";
 	else 
-		colName = "buyerId";
+		{
+		  if(tableName.equals("registeredbuyers"))
+		  {
+			  colName = "buyerId"; 
+		  }  
+	      else
+		  {
+	    		colName = "id";
+	      }
+		}
+	
+	
 	int logSuccess = 0;
 	 try(Connection con = ConnectTODB.connect()){
 		 PreparedStatement ps = con.prepareStatement("Select * from "

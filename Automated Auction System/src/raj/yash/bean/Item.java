@@ -12,15 +12,16 @@ public class Item {
     String name;
     int price;
     int quantity;
-    int soldBy;
-    String category;
-	public Item(int itemid, String name, int price, int quantity, int soldBy, String category) {
+    SellerInfo soldBy;
+    String category; 
+    
+	public Item(int itemid, String name, int price, int quantity, int sellerId,String sellerName, String category) {
 		super();
 		this.itemid = itemid;
 		this.name = name;
 		this.price = price;
 		this.quantity = quantity;
-		this.soldBy = soldBy;
+		this.soldBy = new SellerInfo(sellerId,sellerName);
 		this.category = category;
 	}
 	
@@ -32,8 +33,8 @@ public class Item {
 	public String toString() {
 		return "Item [itemid=" + itemid + " ---  name=" + name + 
 				" ---  price=" + price + " ---  quantity=" + quantity +
-				" ---  soldBy="+ soldBy + " ---  category=" + category+
-				"\n_____________________";
+				" ---  soldBy="+ soldBy.username + " ---  category=" + category+
+				"\n_____________________________________________________________";
 		
 	}
 	
@@ -83,7 +84,7 @@ public class Item {
 			if(x>0)
 				System.out.println("Updated");
 			else
-				System.out.println("Erro in updation");
+				System.out.println("Error in updation");
 		}
 		catch(SQLException e)
 		{

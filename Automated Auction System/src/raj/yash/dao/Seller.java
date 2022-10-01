@@ -23,21 +23,28 @@ public class Seller {
 	public void checkoutInventory() {
 		try(Connection con = ConnectTODB.connect())
 		{
-		     PreparedStatement ps = con.prepareStatement("select * from  "
-		     		+ "itemsbysellers where soldBy = ? ");
+			 String stat = "select i.itemId,i.name,i.price,i.quantity"
+ 		               +",i.category"
+  	 		       +",s.sellerid,s.username"
+ 		               +" from itemsbySellers i"
+ 		               +" INNER JOIN registeredSellers s"
+ 		               +" ON i.soldBy = s.sellerId ";
+		     PreparedStatement ps = con.prepareStatement(stat
+		     		+ "AND soldBy = ? ");
 		     ps.setInt(1, this.sellerId);
 		     ResultSet rs = ps.executeQuery();
 		     boolean hasNoItems = true; 
 		     while(rs.next()) 
 		     {
 		    	 hasNoItems = false;
-		    	 int id = rs.getInt("itemId");
-		    	 String name = rs.getString("name");
-		    	 int price = rs.getInt("price");
-		    	 int quan = rs.getInt("quantity");
-		    	 int soldBy = rs.getInt("soldBy");
-		    	 String category = rs.getString("category");
-		    	 Item item = new Item(id,name,price,quan,soldBy,category);
+		    	 int id = rs.getInt("i.itemId");
+		    	 String name = rs.getString("i.name");
+		    	 int price = rs.getInt("i.price");
+		    	 int quan = rs.getInt("i.quantity");
+		    	 int sellerId = rs.getInt("s.sellerid");
+		    	 String sellerName = rs.getString("s.username");
+		    	 String category = rs.getString("i.category");
+		    	 Item item = new Item(id,name,price,quan,sellerId,sellerName,category);
 		    	 System.out.println(item);
 		     }
 		     if(hasNoItems) 
@@ -87,6 +94,7 @@ public class Seller {
 			    	System.out.println("ERROR IN INSERTION");
 				System.out.println("press 1 to keep on adding and 0 to exit ");
 			    flag = sc.nextInt();
+			    sc.nextLine();
 			}
 			
 		}
@@ -140,7 +148,7 @@ public class Seller {
 		while(flag)
 		{
 		  this.checkoutInventory();	
-		  System.out.println("Enter ITem ID that you would like to update\n"
+		  System.out.println("Enter ITem ID that you would like to DELETE\n"
 		  		+ "0.Exit");
 		  int itemid = sc.nextInt();
 		  if(itemid==0)
@@ -151,6 +159,53 @@ public class Seller {
 			  item.delete();
 		  }
 		}  
+    }
+
+    public void soldItems() {
+    	try(Connection con = ConnectTODB.connect())
+    	{
+    		String stat = "select distinct i.itemid , i.name,i.price,i.category,\r\n"
+    				+ " sold.quantity,owner.username Owner,seller.username SoldBy from\r\n"
+    				+ " itemssold sold\r\n"
+    				+ " INNER JOIN itemsbysellers i\r\n"
+    				+ " INNER JOIN registeredBuyers owner\r\n"
+    				+ " INNER JOIN RegisteredSellers seller\r\n"
+    				+ " ON  sold.itemId = i.ItemId\r\n"
+    				+ " AND\r\n"
+    				+ " sold.ownerId = owner.buyerId\r\n"
+    				+ " AND\r\n"
+    				+ " i.soldBy = seller.sellerId"
+    				+ " AND sellerId = "+this.sellerId;
+    		PreparedStatement ps = con.prepareStatement(stat);
+    		ResultSet rs = ps.executeQuery();
+    		boolean isEmpty = true;
+    		while(rs.next()) 
+    		{
+    			if(isEmpty) 
+    			{
+    	System.out.println("ID----NAME----PRICE----CATEGORY----QUANTITY----OWNER----SELLER");
+    	System.out.println("______________________________________________________________");
+    			}
+    			isEmpty = false;
+    			int id  = rs.getInt("i.itemid");
+    			String name = rs.getString("i.name");
+    			int price = rs.getInt("i.price");
+    			String cat = rs.getString("i.category");
+    			int quan= rs.getInt("sold.quantity");
+        		String owner = rs.getString("owner");
+        		String seller = rs.getString("SoldBy");
+  System.out.println(id+"----"+name+"----"+price+"----"+cat+"----"+quan+"----"+owner+"----"+seller);      
+  System.out.println("_____________________________________________________________________________________");  		
+    		}
+    		if(isEmpty)
+    		{
+    			System.out.println("No sales Made Today");
+    		}	
+    	}
+    	catch(SQLException e)
+    	{
+    		System.out.println(e.getMessage());
+    	}
     }
 }
 
