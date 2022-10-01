@@ -1,18 +1,21 @@
 package raj.yash.usecase;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
 import raj.yash.Utility.ConnectTODB;
 import raj.yash.Utility.Login_Signup;
+import raj.yash.bean.Category;
 import raj.yash.dao.Buyer;
 
 public class BuyerOptions {
 	public static void start() {
 		Scanner sc = new Scanner(System.in);
 		boolean flag = true;
-		String tablename = "Registeredbuyers";
+		String tablename = "registeredbuyers";
 		while(flag)
 		{
 			System.out.println("Select >>>>> \n 1.Signup (if new user)  \n"
@@ -52,11 +55,12 @@ public class BuyerOptions {
 	
 	public static void functions(int buyerId)
 	{
+		BuyerOptions b1 = new BuyerOptions();
 	   try(Connection con = ConnectTODB.connect())
 	   {
 		   Scanner sc = new Scanner(System.in);
-		   boolean flag = true;
-		   while(flag)
+		   boolean flagc = true;
+		   while(flagc)
 		   {
 			   System.out.println("What would you like to buy \n"
 				   		+ "1.See ALL \n"
@@ -66,8 +70,8 @@ public class BuyerOptions {
 				   switch(n)
 				   {
 				    case 1 : buyer.seeAll();break;
-				    case 2: break;
-				    case 3 : flag = false; 
+				    case 2 : b1.seeCategory(buyerId);break;
+				    case 3 : flagc = false; 
 				   }  
 		   }
 		   
@@ -77,5 +81,27 @@ public class BuyerOptions {
 		   e.getMessage();
 	   }
 	}
-	
+	public  void seeCategory(int buyerId) {
+		
+		
+		try(Connection con = ConnectTODB.connect())
+		{
+			PreparedStatement ps = con.prepareStatement("select category from "
+					+ "itemsbySellers group by category ");
+			ResultSet rs = ps.executeQuery();
+		    Category cat = new Category();
+		    while(rs.next()) 
+		    {
+		    	String itemcat = rs.getString("category");
+		    	cat.category.add(itemcat);
+		    }
+		    cat.category.add("Exit");
+			cat.checkoutCategory(buyerId);
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+	}
 }
